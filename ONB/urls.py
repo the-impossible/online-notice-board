@@ -18,11 +18,11 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-
 urlpatterns = [
     path('dev/', admin.site.urls),
     path('', include('ONB_basics.urls', namespace='basics')),
     path('auth/', include('ONB_auth.urls', namespace='auth')),
+    path('admin/', include('ONB_admin.urls', namespace='super')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

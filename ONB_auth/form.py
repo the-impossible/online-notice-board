@@ -9,6 +9,7 @@ class AccountCreationForm(forms.ModelForm):
         attrs={
             'class':'form-control',
             'autofocus':'',
+            'placeholder':'Enter your Full name',
         }
     ))
 

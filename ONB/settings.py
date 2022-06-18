@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ONB_basics',
     'ONB_auth',
+    'ONB_admin',
 ]
 
 MIDDLEWARE = [

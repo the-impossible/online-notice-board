@@ -68,8 +68,8 @@
 
     <ul class="menu-inner py-1">
       <!-- Dashboard -->
-      <li class="menu-item active">
-        <a href="index.html" class="menu-link">
+      <li class="menu-item">
+        <a href="{% url 'super:dashboard' %}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-home-circle"></i>
           <div data-i18n="Analytics">Dashboard</div>
         </a>
@@ -81,13 +81,13 @@
 
       <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
-          <i class="menu-icon tf-icons bx bx-dock-top"></i>
+          <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
           <div data-i18n="Account Settings">Students</div>
         </a>
         <ul class="menu-sub">
           <li class="menu-item">
-            <a href="pages-account-settings-account.html" class="menu-link">
-              <div data-i18n="Account">Create Student</div>
+            <a href="{% url 'super:create_account' %}" class="menu-link">
+              <div data-i18n="Account">Create Accounts</div>
             </a>
           </li>
           <li class="menu-item">
@@ -95,27 +95,14 @@
               <div data-i18n="Notifications">Manage Student</div>
             </a>
           </li>
+          <li class="menu-item">
+            <a href="pages-account-settings-notifications.html" class="menu-link">
+              <div data-i18n="Notifications">Manage Staff</div>
+            </a>
+          </li>
         </ul>
       </li>
 
-      <li class="menu-item">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
-          <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
-          <div data-i18n="Authentications">Staffs</div>
-        </a>
-        <ul class="menu-sub">
-          <li class="menu-item">
-            <a href="auth-login-basic.html" class="menu-link" target="_blank">
-              <div data-i18n="Basic">Create Staff</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="auth-register-basic.html" class="menu-link" target="_blank">
-              <div data-i18n="Basic">Manage Staff</div>
-            </a>
-          </li>
-        </ul>
-      </li>
 
       <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
