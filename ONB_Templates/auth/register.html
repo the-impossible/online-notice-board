@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Register{% endblock %}
+{% block head %}
+{% include "partials/auth_head.html" %}
+{% endblock%}
+{% block body %}
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <!-- Register Card -->
+      <div class="card">
+        <div class="card-body">
+          <!-- Logo -->
+          {% include "partials/brand.html" %}
+          <p class="mb-3 text-center">Signup in order to view all notifications!</p>
+
+          {% include "partials/messages.html" %}
+          <form id="formAuthentication" class="mb-3" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="Fullname" class="form-label">Full name</label>
+              {{ form.fullname }}
+              {% if form.fullname.errors %}
+              <div class="alert alert-danger mt-2" role="alert">
+                {{ form.fullname.errors }}
+              </div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              <label for="reg_no" class="form-label">Reg. No.</label>
+              {{ form.username }}
+              {% if form.username.errors %}
+              <div class="alert alert-danger mt-2" role="alert">
+                {{ form.username.errors }}
+              </div>
+              {% endif %}
+            </div>
+            <div class="mb-3 form-password-toggle">
+              <label class="form-label" for="password">Password</label>
+              <div class="input-group input-group-merge">
+                {{ form.password }}
+                {% if form.password.errors %}
+                <div class="alert alert-danger mt-2" role="alert">
+                  {{ form.password.errors }}
+                </div>
+                {% endif %}
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+            </div>
+            <button class="btn btn-primary d-grid w-100">Sign up</button>
+          </form>
+
+          <p class="text-center">
+            <span>Already have an account?</span>
+            <a href="{% url 'auth:login' %}">
+              <span>Sign in instead</span>
+            </a>
+          </p>
+        </div>
+      </div>
+      <!-- Register Card -->
+    </div>
+  </div>
+</div>
+{% include "partials/auth_script.html" %}
+{% endblock %}

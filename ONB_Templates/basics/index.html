@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Home{% endblock %}
+{% block head %}
+	{% include 'partials/head.html' %}
+{% endblock %}
+{% block body %}
+  <!-- Back to top button -->
+  <div class="back-to-top"></div>
+
+  {% include "partials/nav.html" %}
+  <div class="container">
+    <div class="page-banner home-banner">
+      <div class="row align-items-center flex-wrap-reverse h-100">
+        <div class="col-md-6 py-5 wow fadeInLeft">
+          <h1 class="mb-4">Get Up-to-date!</h1>
+          <p class="text-lg text-grey mb-5">Get informed with the recent happenings from the Department of computer science</p>
+          <a href="#" class="btn btn-primary">Get Started </a>
+        </div>
+        <div class="col-md-3 py-5 wow zoomIn">
+          <div class="img-fluid img-responsive text-center">
+            <img src="{% static 'img/board.svg' %}" width="400" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blog -->
+  <div class="page-section">
+    <div class="container">
+      <div class="text-center wow fadeInUp">
+        <div class="subhead">Our Board</div>
+        <h2 class="title-section">Read Latest Information from the Department</h2>
+        <div class="divider mx-auto"></div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-lg-4 py-3 wow fadeInUp">
+          <div class="card-blog">
+            <div class="header">
+              <div class="post-thumb">
+                <img src="{% static 'img/blog-1.jpg' %}" alt="">
+              </div>
+            </div>
+            <div class="body">
+              <h5 class="post-title"><a href="#">Source of Content Inspiration</a></h5>
+              <div class="post-date">Posted on <a href="#">27 Jan 2020</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 py-3 wow fadeInUp">
+          <div class="card-blog">
+            <div class="header">
+              <div class="post-thumb">
+                <img src="{% static 'img/blog-2.jpg' %}" alt="">
+              </div>
+            </div>
+            <div class="body">
+              <h5 class="post-title"><a href="#">Source of Content Inspiration</a></h5>
+              <div class="post-date">Posted on <a href="#">27 Jan 2020</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 py-3 wow fadeInUp">
+          <div class="card-blog">
+            <div class="header">
+              <div class="post-thumb">
+                <img src="{% static 'img/blog-3.jpg' %}" alt="">
+              </div>
+            </div>
+            <div class="body">
+              <h5 class="post-title"><a href="#">Source of Content Inspiration</a></h5>
+              <div class="post-date">Posted on <a href="#">27 Jan 2020</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 mt-4 text-center wow fadeInUp">
+          <a href="blog.html" class="btn btn-primary">View More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ {% include "partials/footer.html" %}
+
+{% include "partials/script.html" %}
+
+{% endblock %}
