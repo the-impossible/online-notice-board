@@ -17,7 +17,7 @@
           <h4 class="mb-2">Welcome to Users! 👋</h4>
           <p class="mb-4 text-center">Please sign-in to your account and to view notifications</p>
           {% include "partials/messages.html" %}
-          <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+          <form id="formAuthentication" class="mb-3" method="POST">
             {% csrf_token %}
             <div class="mb-3">
               <label for="login_id" class="form-label">Reg. No or Staff No.</label>
