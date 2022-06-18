@@ -32,3 +32,7 @@ class RegisterView(View):
 class LoginView(View):
     def get(self, request):
         return render(request, 'auth/login.html')
+
+class DashboardView(View):
+    def get(self, request):
+        return render(request, 'auth/dashboard.html')
