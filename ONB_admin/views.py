@@ -5,6 +5,7 @@ from django.contrib import messages
 
 # My app imports
 from ONB_auth.form import AccountCreationForm
+from ONB_auth.models import Accounts
 
 # Create your views here.
 class DashboardView(View):
@@ -33,4 +34,24 @@ class CreateAccountView(View):
 
             messages.success(request, f'{message} account has been created')
             return redirect('super:create_account')
+
+        messages.error(request, f'Invalid credentials')
         return render(request, 'admin/create_account.html', {'form':form})
+
+class ManageStudentView(View):
+    def get(self, request):
+        students = Accounts.objects.filter(is_staff=False)
+        context = {
+            'students':students,
+        }
+
+        return render(request, 'admin/manage_student.html', context)
+
+class ManageStaffView(View):
+    def get(self, request):
+        staffs = Accounts.objects.filter(is_staff=True)
+        context = {
+            'staffs':staffs,
+        }
+
+        return render(request, 'admin/manage_staff.html', context)
