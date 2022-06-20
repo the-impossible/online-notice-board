@@ -66,14 +66,13 @@ class AccountEditForm(forms.ModelForm):
         }
     ))
 
-    password = forms.CharField(required=True, help_text='Password must contain at least 6 characters',
-    widget=forms.TextInput(
-        attrs={
-            'class':'form-control',
-            'placeholder':'Password ',
-            'type':'Password',
-        }
-    ))
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        num = len(username)
+        if num != 12:
+            raise forms.ValidationError('Registration number, should be exactly 12 characters!')
+
+        return username
 
     class Meta:
         model = Accounts

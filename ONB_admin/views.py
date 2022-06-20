@@ -63,9 +63,91 @@ class ProfileView(View):
             form = AccountEditForm(instance=user)
             context = {
                 'form':form,
+                'acct':user,
             }
         except Accounts.DoesNotExist:
             messages.error(request, 'Account does not exists')
             return redirect('super:dashboard')
 
         return render(request, 'admin/profile.html', context)
+
+    def post(self, request, user_id):
+        try:
+            user = Accounts.objects.get(id=user_id)
+            form = AccountEditForm(request.POST, instance=user)
+
+            if 'profile' in request.POST:
+                if form.is_valid():
+                    form = form.save(commit=False)
+                    lecturer = request.POST.get('lecturer')
+                    if lecturer:
+                        form.is_staff = True
+                    else:
+                        form.is_staff = False
+                    form.save()
+                    messages.success(request, 'Profile update successful!')
+                    return redirect('super:profile', user_id)
+                else:
+                    messages.error(request, 'Error updating profile!')
+                    context = {
+                        'form':form,
+                    }
+            if 'password' in request.POST:
+                password = request.POST.get('password1')
+                password1 = request.POST.get('password2')
+
+                if (password != password1):
+                    messages.error(request, 'Password does not match!')
+                    return redirect('super:profile', user_id)
+
+                if(len(password1) < 6):
+                    messages.error(request, 'Password too short!')
+                    return redirect('super:profile', user_id)
+
+                user = Accounts.objects.get(id=user_id)
+                user.set_password(password)
+                user.save()
+
+                messages.success(request, 'Password reset successful!!')
+                if request.user == user:
+                    return redirect('auth:login')
+
+                if request.user.is_superuser:
+                    return redirect('super:profile', user_id)
+                return redirect('auth:login')
+
+        except Accounts.DoesNotExist:
+            messages.error(request, 'Account does not exists')
+            return redirect('super:dashboard')
+
+        return render(request, 'admin/profile.html', context)
+
+class ChangeRoleView(View):
+    def get(self, request, user_id, role):
+        try:
+            user = Accounts.objects.get(id=user_id)
+            if role == 'admin':
+                user.is_superuser = True
+            else:
+                user.is_superuser = False
+            user.save()
+            messages.success(request, f'{user.fullname} role has been changed')
+        except Accounts.DoesNotExist:
+            messages.error(request, f'Error swapping user role')
+
+        return redirect(to="super:manage_staff")
+class DeleteAccountView(View):
+    def get(self, request, user_id, role):
+        try:
+            user = Accounts.objects.get(id=user_id)
+            user.delete()
+            messages.success(request, f'{user.fullname} has been deleted')
+        except Accounts.DoesNotExist:
+            messages.error(request, f'Error deleting user')
+
+        if role == 'staff':
+            if request.user == user:
+                return redirect('auth:login')
+            return redirect(to="super:manage_staff")
+        return redirect(to="super:manage_student")
+
