@@ -4,7 +4,7 @@ from django.views import View
 from django.contrib import messages
 
 # My app imports
-from ONB_auth.form import AccountCreationForm
+from ONB_auth.form import AccountCreationForm, AccountEditForm
 from ONB_auth.models import Accounts
 
 # Create your views here.
@@ -55,3 +55,17 @@ class ManageStaffView(View):
         }
 
         return render(request, 'admin/manage_staff.html', context)
+
+class ProfileView(View):
+    def get(self, request, user_id):
+        try:
+            user = Accounts.objects.get(id=user_id)
+            form = AccountEditForm(instance=user)
+            context = {
+                'form':form,
+            }
+        except Accounts.DoesNotExist:
+            messages.error(request, 'Account does not exists')
+            return redirect('super:dashboard')
+
+        return render(request, 'admin/profile.html', context)

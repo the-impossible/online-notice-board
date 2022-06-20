@@ -49,3 +49,32 @@ class AccountCreationForm(forms.ModelForm):
     class Meta:
         model = Accounts
         fields = ('fullname', 'username', 'password')
+
+class AccountEditForm(forms.ModelForm):
+    fullname = forms.CharField(required=True, help_text='Please enter your Fullname',widget=forms.TextInput(
+        attrs={
+            'class':'form-control',
+            'autofocus':'',
+            'placeholder':'Enter your Full name',
+        }
+    ))
+
+    username = forms.CharField(required=True,help_text='Please enter your registration number', widget=forms.TextInput(
+        attrs={
+            'class':'form-control',
+            'placeholder':'Enter your registration number',
+        }
+    ))
+
+    password = forms.CharField(required=True, help_text='Password must contain at least 6 characters',
+    widget=forms.TextInput(
+        attrs={
+            'class':'form-control',
+            'placeholder':'Password ',
+            'type':'Password',
+        }
+    ))
+
+    class Meta:
+        model = Accounts
+        fields = ('fullname', 'username',)

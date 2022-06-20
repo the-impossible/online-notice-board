@@ -7,6 +7,7 @@ from ONB_admin.views import (
     CreateAccountView,
     ManageStudentView,
     ManageStaffView,
+    ProfileView,
 )
 
 app_name = 'admin'
@@ -17,4 +18,7 @@ urlpatterns = [
     path('create_account', CreateAccountView.as_view(), name='create_account'),
     path('manage_student', ManageStudentView.as_view(), name='manage_student'),
     path('manage_staff', ManageStaffView.as_view(), name='manage_staff'),
+    # Profile
+    path('profile/<int:user_id>/', ProfileView.as_view(), name='profile'),
+
 ]
