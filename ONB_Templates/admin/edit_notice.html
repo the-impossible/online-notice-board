@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Update Notice{% endblock %}
+{% block head %}
+{% include "partials/auth_head.html" %}
+{% endblock%}
+{% block body %}
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <!-- Menu -->
+
+    {% include "partials/sidebar.html" %}
+    <!-- / Menu -->
+    <!-- Layout container -->
+    <div class="layout-page">
+      {% include "partials/login_nav.html" %}
+      <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"> <a href="{% url 'super:view_notification' notify.id %}">Notification</a>/</span> Edit notice</h4>
+
+          <!-- Basic Layout & Basic with Icons -->
+          <div class="row">
+
+            <!-- Basic with Icons -->
+            <div class="col-xxl">
+              {% include "partials/messages.html" %}
+              <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                  <h5 class="mb-0">Edit previous updated information</h5>
+                  <small class="text-muted float-end">staffs, students or both</small>
+                </div>
+                <div class="card-body">
+                  <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Title</label>
+                      <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                          <span id="basic-icon-default-fullname2" class="input-group-text"
+                            ><i class="bx bx-pie-chart-alt"></i
+                          ></span>
+                          {{ form.title }}
+                        </div>
+                        {% if form.title.errors %}
+                        <div class="alert alert-danger mt-2" role="alert">
+                          {{ form.title.errors }}
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Image (Optional)</label>
+                      <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                          <span id="basic-icon-default-company2" class="input-group-text"
+                            ><i class="bx bx-buildings"></i
+                          ></span>
+                          {{ form.image }}
+                        </div>
+                        {% if form.image.errors %}
+                        <div class="alert alert-danger mt-2" role="alert">
+                          {{ form.image.errors }}
+                        </div>
+                        {% endif %}
+                        <label class="col-form-label" for="basic-icon-default-email">Currently: <a href="{{ notify.image.url }}" target="_blank" rel="noopener noreferrer">{{ notify.image.url}}</a> </label>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label" for="basic-icon-default-email">File (Optional)</label>
+                      <div class="col-sm-10 ">
+                        <div class="input-group input-group-merge">
+                          <span class="input-group-text"><i class="bx bx-buildings"></i></span>
+                          {{ form.file }}
+                        </div>
+                        {% if form.file.errors %}
+                        <div class="alert alert-danger mt-2" role="alert">
+                          {{ form.file.errors }}
+                        </div>
+                        {% endif %}
+                        <label class="col-form-label" for="basic-icon-default-email">Currently: <a href="{{ notify.file.url }}" target="_blank" rel="noopener noreferrer">{{ notify.file.url}}</a> </label>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label" for="basic-icon-default-email">Receiver</label>
+                      <div class="col-sm-10 ">
+                        <div class="input-group input-group-merge">
+                          <span class="input-group-text"><i class="bx bx-user"></i></span>
+                          {{ form.receiver }}
+                        </div>
+                        {% if form.receiver.errors %}
+                        <div class="alert alert-danger mt-2" role="alert">
+                          {{ form.receiver.errors }}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">Send to</div>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label" for="basic-icon-default-email">Descriptions</label>
+                      <div class="col-sm-10 ">
+                        <div class="input-group input-group-merge">
+                          <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                          {{ form.description }}
+                        </div>
+                        {% if form.description.errors %}
+                        <div class="alert alert-danger mt-2" role="alert">
+                          {{ form.description.errors }}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">Descriptions of the notification</div>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <div class="col-sm-2"></div>
+                      <div class="col-sm-10 d-grid gap-2 mx-auto">
+                        <button type="submit" class="btn btn-primary btn-lg">Post Notification</button>
+                      </div>
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- / Content -->
+        {% include "partials/login_footer.html" %}
+
+        <div class="content-backdrop fade"></div>
+      </div>
+      <!-- Content wrapper -->
+    </div>
+    <!-- / Layout page -->
+  </div>
+
+  <!-- Overlay -->
+  <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+{% include "partials/auth_script.html" %}
+{% endblock %}

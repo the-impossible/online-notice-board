@@ -10,6 +10,11 @@ from ONB_admin.views import (
     ProfileView,
     ChangeRoleView,
     DeleteAccountView,
+    CreateNotificationView,
+    ManageNotificationView,
+    ViewNotificationView,
+    EditNotificationView,
+    DeleteNotificationView,
 )
 
 app_name = 'admin'
@@ -26,5 +31,11 @@ urlpatterns = [
     path('role/<int:user_id>/<str:role>/', ChangeRoleView.as_view(), name='role'),
     # Delete Account
     path('delete/<int:user_id>/<str:role>/', DeleteAccountView.as_view(), name='delete'),
+    # Notification
+    path('notify', CreateNotificationView.as_view(), name='notify'),
+    path('manage_notification', ManageNotificationView.as_view(), name='manage_notification'),
+    path('view_notification/<int:notification_id>', ViewNotificationView.as_view(), name='view_notification'),
+    path('edit_notification/<int:notification_id>', EditNotificationView.as_view(), name='edit_notification'),
+    path('delete_notification/<int:notification_id>', DeleteNotificationView.as_view(), name='delete_notification'),
 
 ]

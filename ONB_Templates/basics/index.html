@@ -35,53 +35,38 @@
         <div class="divider mx-auto"></div>
       </div>
 
+      {% if notifications %}
       <div class="row mt-5">
-        <div class="col-lg-4 py-3 wow fadeInUp">
-          <div class="card-blog">
-            <div class="header">
-              <div class="post-thumb">
-                <img src="{% static 'img/blog-1.jpg' %}" alt="">
+        {% for notify in notifications %}
+        <div class="col-lg-3 col-md-4 col-12 py-3 wow fadeInUp">
+          <div class="card h-100 v-50">
+            <img class="card-img-top" src="{{ notify.image.url }}" alt="Card image cap" />
+            <div class="card-body">
+              <h5 class="card-title">{{ notify.title|slice:"18"|title }}...</h5>
+              <p class="card-text">{{ notify.description|slice:"100" }}...</p>
+              <div class="row">
+                <div class="mx-auto">
+                  <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm mt-3">View Details</a>
+                </div>
               </div>
-            </div>
-            <div class="body">
-              <h5 class="post-title"><a href="#">Source of Content Inspiration</a></h5>
-              <div class="post-date">Posted on <a href="#">27 Jan 2020</a></div>
             </div>
           </div>
         </div>
-
-        <div class="col-lg-4 py-3 wow fadeInUp">
-          <div class="card-blog">
-            <div class="header">
-              <div class="post-thumb">
-                <img src="{% static 'img/blog-2.jpg' %}" alt="">
-              </div>
-            </div>
-            <div class="body">
-              <h5 class="post-title"><a href="#">Source of Content Inspiration</a></h5>
-              <div class="post-date">Posted on <a href="#">27 Jan 2020</a></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 py-3 wow fadeInUp">
-          <div class="card-blog">
-            <div class="header">
-              <div class="post-thumb">
-                <img src="{% static 'img/blog-3.jpg' %}" alt="">
-              </div>
-            </div>
-            <div class="body">
-              <h5 class="post-title"><a href="#">Source of Content Inspiration</a></h5>
-              <div class="post-date">Posted on <a href="#">27 Jan 2020</a></div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="container">
+        <div class="row align-items-center flex-wrap-reverse h-100">
+          <div class="col-md-6 py-5 wow fadeInLeft mx-auto">
+            <h1 class="mb-4 text-center">No update found!</h1>
+            <p class="text-lg text-grey mb-5 text-center">No information yet, if you are a student try logging in</p>
+            <div class="row">
+              <a href="{% url 'auth:login' %}" class="btn btn-primary mx-auto">Login </a>
             </div>
           </div>
-        </div>
-
-        <div class="col-12 mt-4 text-center wow fadeInUp">
-          <a href="blog.html" class="btn btn-primary">View More</a>
         </div>
       </div>
+      {% endif %}
     </div>
   </div>
 

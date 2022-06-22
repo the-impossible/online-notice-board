@@ -5,6 +5,8 @@ from django.contrib import messages
 
 # My app imports
 from ONB_auth.form import AccountCreationForm, AccountEditForm
+from ONB_admin.form import CreateNotificationForm
+from ONB_admin.models import Notification
 from ONB_auth.models import Accounts
 
 # Create your views here.
@@ -136,6 +138,7 @@ class ChangeRoleView(View):
             messages.error(request, f'Error swapping user role')
 
         return redirect(to="super:manage_staff")
+
 class DeleteAccountView(View):
     def get(self, request, user_id, role):
         try:
@@ -151,3 +154,86 @@ class DeleteAccountView(View):
             return redirect(to="super:manage_staff")
         return redirect(to="super:manage_student")
 
+class CreateNotificationView(View):
+    def get(self, request):
+        context = {
+            'form':CreateNotificationForm()
+        }
+        return render(request, 'admin/create_notice.html', context)
+
+    def post(self, request):
+        form = CreateNotificationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form = form.save(commit=False)
+            try:
+                user = Accounts.objects.get(id=request.user.id)
+                form.created_by = user
+                form.save()
+                messages.success(request, f'Notification has been sent to the {form.receiver}')
+                return redirect('super:notify')
+            except Accounts.DoesNotExist:
+                messages.error(request, 'User does not exist!!')
+                return redirect(to="auth:login")
+
+        messages.error(request, f'Error uploading Notification\n {form.errors} ')
+        return render(request, 'admin/create_notice.html', {'form': form})
+
+class ManageNotificationView(View):
+    def get(self, request):
+        notifications = Notification.objects.all()
+        context = {
+            'notifications':notifications
+        }
+        return render(request, 'admin/manage_notification.html', context)
+
+class ViewNotificationView(View):
+    def get(self, request, notification_id):
+        try:
+            notifications = Notification.objects.get(id=notification_id)
+            context = {
+                'notify':notifications
+            }
+        except Notification.DoesNotExist:
+            messages.error(request, "Error Displaying notification")
+            return redirect(to='super:manage_notification')
+        return render(request, 'admin/view_notification.html', context)
+
+class EditNotificationView(View):
+    def get(self, request, notification_id):
+        try:
+            notification = Notification.objects.get(id=notification_id)
+            context = {
+                'form':CreateNotificationForm(initial={'receiver':notification.receiver}, instance=notification),
+                'notify':notification,
+            }
+            return render(request, 'admin/edit_notice.html', context)
+        except Notification.DoesNotExist:
+            messages.error(request, 'Notification does not exist!')
+            return redirect('super:manage_notification')
+
+    def post(self, request, notification_id):
+        try:
+            notification = Notification.objects.get(id=notification_id)
+            form = CreateNotificationForm(request.POST, request.FILES, initial={'receiver':notification.receiver}, instance=notification)
+
+            if form.is_valid():
+                messages.success(request, 'Notification has been updated successfully!!')
+                form.save()
+                return redirect('super:view_notification', notification_id)
+
+            messages.error(request, 'Updating notification failed!!')
+            return redirect('super:edit_notification', notification_id)
+
+        except Notification.DoesNotExist:
+            messages.error(request, 'Notification does not exist!')
+            return redirect('super:manage_notification')
+
+class DeleteNotificationView(View):
+    def get(self, request, notification_id):
+        try:
+            notification = Notification.objects.get(id=notification_id)
+            # notification.delete()
+            messages.success(request, 'Notification has been deleted successfully!!')
+        except Notification.DoesNotExist:
+            messages.error(request, 'Failed: Notification does not exist!')
+        return redirect('super:manage_notification')

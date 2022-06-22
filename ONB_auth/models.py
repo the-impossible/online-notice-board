@@ -72,7 +72,7 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
         return self.fullname
 
     def __str__(self):
-        return f'{self.username}'
+        return f'{self.username} | {self.fullname}'
 
     def has_perm(self, perm, obj=None):
         return self.is_staff
