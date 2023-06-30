@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
+from django.db.models import Q
 
 # My app imports
 from ONB_auth.form import AccountCreationForm, AccountEditForm
@@ -12,7 +13,17 @@ from ONB_auth.models import Accounts
 # Create your views here.
 class DashboardView(View):
     def get(self, request):
-        return render(request, 'admin/dashboard.html')
+        students = Accounts.objects.filter(is_staff=False).count()
+        staffs = Accounts.objects.filter(is_staff=True).count()
+        staff_notification = Notification.objects.filter(receiver='Staff').count()
+        staff_student_notification = Notification.objects.filter(receiver='Staff and Student').count()
+        context = {
+            'students':students,
+            'staffs':staffs,
+            'staff_student_notification':staff_student_notification,
+            'staff_notification':staff_notification
+        }
+        return render(request, 'admin/dashboard.html', context)
 
 class CreateAccountView(View):
     def get(self, request):
@@ -195,8 +206,14 @@ class ViewNotificationView(View):
             }
         except Notification.DoesNotExist:
             messages.error(request, "Error Displaying notification")
-            return redirect(to='super:manage_notification')
-        return render(request, 'admin/view_notification.html', context)
+            if request.user.is_superuser:
+                return redirect(to='super:manage_notification')
+            else:
+                return redirect(to='auth:notifications')
+        if request.user.is_superuser:
+            return render(request, 'admin/view_notification.html', context)
+        else:
+            return render(request, 'auth/view_notification.html', context)
 
 class EditNotificationView(View):
     def get(self, request, notification_id):
@@ -232,8 +249,48 @@ class DeleteNotificationView(View):
     def get(self, request, notification_id):
         try:
             notification = Notification.objects.get(id=notification_id)
-            # notification.delete()
+            notification.delete()
             messages.success(request, 'Notification has been deleted successfully!!')
         except Notification.DoesNotExist:
             messages.error(request, 'Failed: Notification does not exist!')
         return redirect('super:manage_notification')
+
+class SearchNotificationView(View):
+    def get(self, request):
+        context = {}
+        qs = request.GET.get('query')
+        if qs:
+            if request.user.is_superuser:
+                notifications = (
+                    Notification.objects.filter(title__icontains=qs) |
+                    Notification.objects.filter(description__icontains=qs) |
+                    Notification.objects.filter(receiver__icontains=qs) |
+                    Notification.objects.filter(created_by__fullname__icontains=qs)
+                )
+            elif request.user.is_staff:
+                notifications = (
+                    Notification.objects.filter(
+                        Q(title__icontains=qs, receiver='Staff and Student') | Q(title__icontains=qs, receiver='General Public') | Q(title__icontains=qs, receiver='Student') |
+                        Q(description__icontains=qs, receiver='Staff and Student') | Q(description__icontains=qs, receiver='General Public') | Q(description__icontains=qs, receiver='Student') |
+                        Q(created_by__fullname__icontains=qs, receiver='Staff and Student') | Q(created_by__fullname__icontains=qs, receiver='General Public') | Q(created_by__fullname__icontains=qs, receiver='Student') |
+                        Q(receiver__icontains=qs, receiver='Staff and Student') | Q(receiver__icontains=qs, receiver='General Public') | Q(receiver__icontains=qs, receiver='Student')
+                    )
+                )
+            else:
+                notifications = (
+                    Notification.objects.filter(
+                        Q(title__icontains=qs, receiver='Student') | Q(title__icontains=qs, receiver='General Public')|
+                        Q(description__icontains=qs, receiver='Student') | Q(description__icontains=qs, receiver='General Public') |
+                        Q(created_by__fullname__icontains=qs, receiver='Student') | Q(created_by__fullname__icontains=qs, receiver='General Public') |
+                        Q(receiver__icontains=qs, receiver='Student') | Q(receiver__icontains=qs, receiver='General Public')
+                    )
+                )
+            if not notifications:
+                messages.error(request, 'No result found')
+            context['notifications'] = notifications
+            context['qs'] = qs
+        else:
+            messages.error(request, 'Please input a value advisably use keywords')
+            context['qs'] = ''
+
+        return render(request, 'basics/search.html', context)

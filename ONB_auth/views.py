@@ -4,9 +4,12 @@ from django.views import View
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
 # My app imports
 from ONB_auth.form import AccountCreationForm
+from ONB_admin.models import Notification
+from ONB_auth.models import Accounts
 
 # Create your views here.
 class RegisterView(View):
@@ -50,7 +53,7 @@ class LoginView(View):
                     if user.is_superuser:
                         return redirect('super:dashboard')
                     else:
-                        return redirect('basics:dashboard')
+                        return redirect('auth:dashboard')
 
                 else:
                     messages.warning(request, 'Account not active contact the administrator')
@@ -67,3 +70,43 @@ class LogoutView(View, LoginRequiredMixin):
         logout(request)
         messages.success(request, 'You are now signed out!')
         return redirect('auth:login')
+
+class DashboardView(View):
+    def get(self, request):
+        staff_notification = Notification.objects.filter(
+            Q(receiver='Staff and Student') | Q(receiver='Staff') | Q(receiver='General Public')
+        ).count()
+
+        student_notification = Notification.objects.filter(
+            Q(receiver='Staff and Student') | Q(receiver='Student') | Q(receiver='General Public')
+        ).count()
+
+        context = {
+            'student_notification':student_notification,
+            'staff_notification':staff_notification
+        }
+        return render(request, 'auth/dashboard.html', context)
+
+class NotificationView(View):
+    def get(self, request):
+        context = {}
+        if not request.user.is_staff:
+            notifications = (
+                Notification.objects.filter(
+                    Q(receiver='Student') |
+                    Q(receiver='General Public')|
+                    Q(receiver='Staff and Student')
+                )
+            )
+            context['notifications'] = notifications
+        else:
+            notifications = (
+                Notification.objects.filter(
+                    Q(receiver='Staff') |
+                    Q(receiver='Student') |
+                    Q(receiver='General Public')|
+                    Q(receiver='Staff and Student')
+                )
+            )
+            context['notifications'] = notifications
+        return render(request, 'auth/notifications.html', context)

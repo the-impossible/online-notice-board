@@ -17,7 +17,7 @@
       <div class="content-wrapper">
         <!-- Content -->
         <div class="container-xxl flex-grow-1 container-p-y">
-          <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"><a href="{% url 'super:manage_notification' %}">Manage Notifications</a> /</span>Notice</h4>
+          <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"><a href="{% url 'auth:notifications' %}">Notifications</a> /</span>Notice</h4>
           {% include "partials/messages.html" %}
            <!-- Horizontal -->
            <h5 class="pb-1 mb-4 text-center">Details of the notification</h5>
@@ -45,7 +45,6 @@
                        {% if notify.file %}
                        <div class="row">
                         <div class="col-md-12 mx-auto">
-                          <a href="{% url 'super:edit_notification' notify.id %}" class="btn btn-outline-primary mt-3">Edit Notification</a>
                           {% if notify.file %}
                           <a href="{{ notify.file.url }}" download class="btn btn-outline-success mt-3" target="_blank" rel="noopener noreferrer">Download File</a>
                           {% endif %}

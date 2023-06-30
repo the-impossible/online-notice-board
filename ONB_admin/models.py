@@ -7,7 +7,7 @@ from ONB_auth.models import Accounts
 # Create your models here.
 class Notification(models.Model):
     send_to = (
-        ('General', 'General Public'),
+        ('General Public', 'General Public'),
         ('Student', 'Student'),
         ('Staff', 'Staff'),
         ('Staff and Student', 'Staff and Student'),
