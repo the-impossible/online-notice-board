@@ -15,6 +15,7 @@ from ONB_admin.views import (
     ViewNotificationView,
     EditNotificationView,
     DeleteNotificationView,
+    SearchNotificationView,
 )
 
 app_name = 'admin'
@@ -37,5 +38,6 @@ urlpatterns = [
     path('view_notification/<int:notification_id>', ViewNotificationView.as_view(), name='view_notification'),
     path('edit_notification/<int:notification_id>', EditNotificationView.as_view(), name='edit_notification'),
     path('delete_notification/<int:notification_id>', DeleteNotificationView.as_view(), name='delete_notification'),
-
+    # Search
+    path('search', SearchNotificationView.as_view(), name='search'),
 ]

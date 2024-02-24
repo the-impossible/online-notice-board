@@ -27,7 +27,7 @@
                       <p class="mb-4">
                         check the <span class="fw-bold">latest</span> notification.
                       </p>
-                      <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Notification</a>
+                      <a href="{% url 'super:manage_notification' %}" class="btn btn-sm btn-outline-primary">View Notifications</a>
                     </div>
                   </div>
                 </div>
@@ -45,7 +45,7 @@
                             <span class="badge bg-label-warning rounded-pill text">No. of student</span>
                           </div>
                           <div class="mt-sm-auto">
-                            <h3 class="mb-2 mt-2">600</h3>
+                            <h3 class="mb-2 mt-2">{{ students }}</h3>
                           </div>
                         </div>
                         <div id="profileReportChart"></div>
@@ -68,25 +68,7 @@
                             <span class="badge bg-label-success rounded-pill">No. of Staff</span>
                           </div>
                           <div class="mt-sm-auto">
-                            <h3 class="mb-2 mt-3">840</h3>
-                          </div>
-                        </div>
-                        <div id="profileReportChart"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
-                  <div class="card">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
-                        <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                          <div class="card-title">
-                            <h5 class="text-nowrap mb-2">General Notification</h5>
-                            <span class="badge bg-label-primary rounded-pill">No. of general notification</span>
-                          </div>
-                          <div class="mt-sm-auto">
-                            <h3 class="mb-2 mt-3">86</h3>
+                            <h3 class="mb-2 mt-3">{{ staffs }}</h3>
                           </div>
                         </div>
                         <div id="profileReportChart"></div>
@@ -101,10 +83,28 @@
                         <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
                           <div class="card-title">
                             <h5 class="text-nowrap mb-2">Staff Notification</h5>
-                            <span class="badge bg-label-warning rounded-pill">No. of staff notification</span>
+                            <span class="badge bg-label-primary rounded-pill">No. of general notification</span>
                           </div>
                           <div class="mt-sm-auto">
-                            <h3 class="mb-2 mt-3">46</h3>
+                            <h3 class="mb-2 mt-3">{{ staff_notification }}</h3>
+                          </div>
+                        </div>
+                        <div id="profileReportChart"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
+                        <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
+                          <div class="card-title">
+                            <h5 class="text-nowrap mb-2">Staff & Student Notification</h5>
+                            <span class="badge bg-label-warning rounded-pill">No. of staff & student notification</span>
+                          </div>
+                          <div class="mt-sm-auto">
+                            <h3 class="mb-2 mt-3">{{ staff_student_notification }}</h3>
                           </div>
                         </div>
                         <div id="profileReportChart"></div>

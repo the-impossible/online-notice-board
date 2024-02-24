@@ -7,7 +7,7 @@ from ONB_admin.models import Notification
 
 class CreateNotificationForm(forms.ModelForm):
     send_to = (
-        ('General', 'General Public'),
+        ('General Public', 'General Public'),
         ('Student', 'Student'),
         ('Staff', 'Staff'),
         ('Staff and Student', 'Staff and Student'),

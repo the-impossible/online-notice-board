@@ -56,7 +56,7 @@
             </g>
           </svg>
         </span>
-        <span class="app-brand-text demo menu-text fw-bolder ms-2">Notice Board</span>
+        <span class="app-brand-text demo menu-text fw-bolder ms-2">Announcement</span>
       </a>
 
       <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -69,7 +69,11 @@
     <ul class="menu-inner py-1">
       <!-- Dashboard -->
       <li class="menu-item">
+        {% if request.user.is_superuser %}
         <a href="{% url 'super:dashboard' %}" class="menu-link">
+          {% else %}
+        <a href="{% url 'auth:dashboard' %}" class="menu-link">
+        {% endif %}
           <i class="menu-icon tf-icons bx bx-home-circle"></i>
           <div data-i18n="Analytics">Dashboard</div>
         </a>
@@ -78,6 +82,7 @@
       <li class="menu-header small text-uppercase">
         <span class="menu-header-text">Functionalities</span>
       </li>
+      {% if request.user.is_superuser %}
 
       <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -103,7 +108,6 @@
         </ul>
       </li>
 
-
       <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons bx bx-cube-alt"></i>
@@ -122,14 +126,19 @@
           </li>
         </ul>
       </li>
+      {% else %}
 
+      <li class="menu-item">
+        <a href="{% url 'auth:notifications' %}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-user"></i>
+          <div data-i18n="Support">View Notification</div>
+        </a>
+      </li>
+      {% endif %}
       <!-- Misc -->
       <li class="menu-header small text-uppercase"><span class="menu-header-text">Others</span></li>
       <li class="menu-item">
-        <a
-          href="{% url 'super:profile' user.id %}"
-          class="menu-link"
-        >
+        <a href="{% url 'super:profile' user.id %}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-user"></i>
           <div data-i18n="Support">Profile</div>
         </a>
