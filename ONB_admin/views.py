@@ -62,7 +62,7 @@ class ManageStudentView(View):
 
 class ManageStaffView(View):
     def get(self, request):
-        staffs = Accounts.objects.filter(is_staff=True)
+        staffs = Accounts.objects.filter(is_staff=True).exclude(username=request.user.username)
         context = {
             'staffs':staffs,
         }
@@ -264,27 +264,27 @@ class SearchNotificationView(View):
                 notifications = (
                     Notification.objects.filter(title__icontains=qs) |
                     Notification.objects.filter(description__icontains=qs) |
-                    Notification.objects.filter(receiver__icontains=qs) |
-                    Notification.objects.filter(created_by__fullname__icontains=qs)
+                    Notification.objects.filter(receiver__icontains=qs)
                 )
             elif request.user.is_staff:
-                notifications = (
-                    Notification.objects.filter(
-                        Q(title__icontains=qs, receiver='Staff and Student') | Q(title__icontains=qs, receiver='General Public') | Q(title__icontains=qs, receiver='Student') |
-                        Q(description__icontains=qs, receiver='Staff and Student') | Q(description__icontains=qs, receiver='General Public') | Q(description__icontains=qs, receiver='Student') |
-                        Q(created_by__fullname__icontains=qs, receiver='Staff and Student') | Q(created_by__fullname__icontains=qs, receiver='General Public') | Q(created_by__fullname__icontains=qs, receiver='Student') |
-                        Q(receiver__icontains=qs, receiver='Staff and Student') | Q(receiver__icontains=qs, receiver='General Public') | Q(receiver__icontains=qs, receiver='Student')
+                notifications = Notification.objects.filter(
+                        Q(title__icontains=qs, receiver='Staff and Student') |
+                        Q(title__icontains=qs, receiver='General Public') |
+                        Q(title__icontains=qs, receiver='Staff') |
+                        Q(description__icontains=qs, receiver='Staff and Student') |
+                        Q(description__icontains=qs, receiver='General Public') |
+                        Q(description__icontains=qs, receiver='Staff')
                     )
-                )
             else:
-                notifications = (
-                    Notification.objects.filter(
-                        Q(title__icontains=qs, receiver='Student') | Q(title__icontains=qs, receiver='General Public')|
-                        Q(description__icontains=qs, receiver='Student') | Q(description__icontains=qs, receiver='General Public') |
-                        Q(created_by__fullname__icontains=qs, receiver='Student') | Q(created_by__fullname__icontains=qs, receiver='General Public') |
-                        Q(receiver__icontains=qs, receiver='Student') | Q(receiver__icontains=qs, receiver='General Public')
-                    )
+                notifications = Notification.objects.filter(
+                    Q(title__icontains=qs, receiver='Staff and Student')|
+                    Q(title__icontains=qs, receiver='Student')|
+                    Q(title__icontains=qs, receiver='General Public')|
+                    Q(description__icontains=qs, receiver='Staff and Student')|
+                    Q(description__icontains=qs, receiver='Student')|
+                    Q(description__icontains=qs, receiver='General Public')
                 )
+
             if not notifications:
                 messages.error(request, 'No result found')
             context['notifications'] = notifications
